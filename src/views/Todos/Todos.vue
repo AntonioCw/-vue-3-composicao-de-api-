@@ -1,7 +1,9 @@
 <template>
   <h1>
     Lista de tarefas
-    <router-link :to="{name: 'todos.create'}">+</router-link>
+    <router-link :to="{name: 'todos.create'}">
+      <i class="fas fa-plus-square"></i>
+    </router-link>
 
   </h1>
 
@@ -11,10 +13,12 @@
 
   <ul>
     <li v-for="todo in todos" :key="todo.identify">
-      <todo :todo="todo"></todo>
+      <todo :todo="todo"
+            @todoDeleted="removeTodoList"
+            @todoUpdated="">
+      </todo>
     </li>
   </ul>
-  <input type="text" v-model="name">
 </template>
 
 <script>
@@ -39,9 +43,14 @@ export default {
               .finally(() => loading.value = false)
         })
 
+      const removeTodoList = (todo) => todos.value.splice(todos.value.indexOf(todo), 1)
+      const todoUpdated = (todo) => todos.value[todos.value.indexOf(todo)] = todo
+
       return {
         loading,
         todos,
+        removeTodoList,
+        todoUpdated
       }
     },
   components: {
